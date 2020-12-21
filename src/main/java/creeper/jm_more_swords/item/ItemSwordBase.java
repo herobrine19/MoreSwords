@@ -2,6 +2,7 @@ package creeper.jm_more_swords.item;
 
 
 import creeper.jm_more_swords.Main;
+import creeper.jm_more_swords.creativetab.CreativeTabsMoreSwords;
 import creeper.jm_more_swords.init.ItemInit;
 import creeper.jm_more_swords.util.IHasModel;
 import net.minecraft.creativetab.CreativeTabs;
@@ -15,7 +16,7 @@ public class ItemSwordBase extends ItemSword implements IHasModel
         super(material);
         setUnlocalizedName(name);
         setRegistryName(name);
-        setCreativeTab(CreativeTabs.COMBAT);
+        setCreativeTab(CreativeTabsMoreSwords.tabsMoreSwords);
 
         ItemInit.ITEMS.add(this);
     }

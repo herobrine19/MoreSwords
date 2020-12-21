@@ -1,16 +1,19 @@
 package creeper.jm_more_swords.item;
 
-import javafx.geometry.Pos;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.EnumHelper;
 
 public class ItemIceSword extends ItemSwordBase {
+
+    public static final Item.ToolMaterial ICE = EnumHelper.addToolMaterial("ICE", 3, 16, 16.0F, 0.0F, 10);
+
     public ItemIceSword(String name) {
-        super(name, ToolMaterial.DIAMOND);
+        super(name, ICE);
     }
 
 
