@@ -87,6 +87,7 @@ public class ItemIceSword extends ItemSwordBase {
         });
         for(Entity mob:entityList)
         {
+
             BlockPos pos = mob.getPosition();
             if(worldIn.getBlockState(pos).getBlock() == Blocks.AIR || worldIn.getBlockState(pos).getBlock() == Blocks.WATER)
                 worldIn.setBlockState(pos, Blocks.ICE.getDefaultState());
