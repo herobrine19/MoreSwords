@@ -107,6 +107,7 @@ public class ItemIceSword extends ItemSwordBase {
                     worldIn.setBlockState(pos, Blocks.ICE.getDefaultState());
             }
         }
+        stack.damageItem(distance, entityLiving);
         super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
     }
 }

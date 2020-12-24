@@ -54,10 +54,15 @@ public class ItemWitherSword extends ItemSwordBase
 
             for(Entity mob: entityList)
             {
-                ((EntityLiving)mob).addPotionEffect(new PotionEffect(MobEffects.WITHER, 5, 10, true, true));
+                ((EntityLiving)mob).addPotionEffect(new PotionEffect(MobEffects.WITHER, 100, 10, true, true));
             }
         }
     }
 
-
+    @Override
+    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+        target.setHealth(0.5f);
+        target.addPotionEffect(new PotionEffect(MobEffects.WITHER, 100, 10, true, true));
+        return super.hitEntity(stack, target, attacker);
+    }
 }

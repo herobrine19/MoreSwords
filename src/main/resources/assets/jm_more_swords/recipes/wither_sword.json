@@ -10,7 +10,8 @@
       "item": "minecraft:stick"
     },
     "X": {
-      "item": "minecraft:skull"
+      "item": "minecraft:skull",
+      "data": 1
     }
   },
   "result": {
