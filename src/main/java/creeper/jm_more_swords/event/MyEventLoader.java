@@ -1,8 +1,6 @@
 package creeper.jm_more_swords.event;
 
 import creeper.jm_more_swords.init.ItemInit;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
@@ -10,7 +8,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.Sys;
 
 @Mod.EventBusSubscriber
 public class MyEventLoader
