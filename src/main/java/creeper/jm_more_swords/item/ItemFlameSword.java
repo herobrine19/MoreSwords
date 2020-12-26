@@ -2,10 +2,14 @@ package creeper.jm_more_swords.item;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -41,14 +45,30 @@ public class ItemFlameSword extends ItemSwordBase
             {
                 if(mob instanceof EntityLiving)
                 {
-                    mob.setFire(5);
+                    mob.setFire(1);
                 }
             }
         }
         super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
+    //左键效果
+    @Override
+    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+        target.setFire(10);
+        return super.hitEntity(stack, target, attacker);
+    }
 
 
-
+    //右键召唤烈焰人
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+        EntityLiving blaze = new EntityBlaze(worldIn);
+        blaze.setPosition(playerIn.posX, playerIn.posY, playerIn.posZ);
+        if(!worldIn.isRemote)
+        {
+            worldIn.spawnEntity(blaze);
+        }
+        return super.onItemRightClick(worldIn, playerIn, handIn);
+    }
 }
