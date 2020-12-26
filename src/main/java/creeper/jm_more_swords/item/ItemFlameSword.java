@@ -32,6 +32,7 @@ public class ItemFlameSword extends ItemSwordBase
         {
             // 抗火buff
             ((EntityPlayer) entityIn).addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 5, 5,false, false));
+            ((EntityPlayer) entityIn).addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 300, 5,false, false));
 
             if (worldIn instanceof WorldServer)//身边火焰粒子效果
             {

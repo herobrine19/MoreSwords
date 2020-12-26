@@ -31,6 +31,7 @@ public class ItemWitherSword extends ItemSwordBase
         if(isSelected && entityIn instanceof EntityPlayer)
         {
             ((EntityPlayer) entityIn).addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 5, 5,false, false));
+            ((EntityPlayer) entityIn).addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 300, 5,false, false));
 
             if (worldIn instanceof WorldServer)//身边黑色粒子效果
             {

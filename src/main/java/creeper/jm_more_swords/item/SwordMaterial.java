@@ -12,4 +12,5 @@ public class SwordMaterial
     public static final Item.ToolMaterial WATER = EnumHelper.addToolMaterial("WATER", 3, 1000, 16.0F, 3.0F, 100).setRepairItem(new ItemStack(Items.WATER_BUCKET));
     public static final Item.ToolMaterial WITHER = EnumHelper.addToolMaterial("WITHER", 3, 1000000, 16.0F, 3.0F, 100).setRepairItem(new ItemStack(Blocks.SKULL));
     public static final Item.ToolMaterial FLAME = EnumHelper.addToolMaterial("FLAME", 3, 1000, 16.0F, 3.0F, 100).setRepairItem(new ItemStack(Items.BLAZE_POWDER));
+    public static final Item.ToolMaterial ENDER = EnumHelper.addToolMaterial("ENDER", 3, 1000, 16.0F, 3.0F, 100).setRepairItem(new ItemStack(Items.ENDER_PEARL));
 }
