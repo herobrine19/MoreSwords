@@ -1,25 +1,17 @@
 package creeper.jm_more_swords.item;
 
-import com.google.common.base.Predicate;
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fml.common.Mod;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemIceSword extends ItemSwordBase {
@@ -81,33 +73,24 @@ public class ItemIceSword extends ItemSwordBase {
 
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-        int distance = (int)((ACCUMULATION-timeLeft)*1.0/ACCUMULATION * MAX_DISTANCE +1);
-        List<Entity> entityList = worldIn.getEntitiesInAABBexcluding(entityLiving, entityLiving.getEntityBoundingBox().grow(distance), new Predicate<Entity>() {
-            @Override
-            public boolean apply(@Nullable Entity input) {
-                if(input instanceof EntityMob)
-                    return true;
-                if(input instanceof EntityLiving)
-                {
-                    EntityLivingBase target = ((EntityLiving) input).getAttackTarget();
-                    if(target==entityLiving)  // 如果攻击目标是玩家
-                        return true;
-                }
-                return false;
-            }
-        });
-        for(Entity mob:entityList)
+        if(entityLiving instanceof EntityPlayer)
         {
-            AxisAlignedBB bb = mob.getEntityBoundingBox();
-            Iterable<BlockPos> posIterable = BlockPos.getAllInBox((int)Math.round(bb.minX), (int)Math.round(bb.minY), (int)Math.round(bb.minZ),
-                    (int)Math.round(bb.maxX), (int)Math.round(bb.maxY), (int)Math.round(bb.maxZ));
-            for(BlockPos pos: posIterable)
+            int distance = (int)((ACCUMULATION-timeLeft)*1.0/ACCUMULATION * MAX_DISTANCE +1);
+            List<Entity> entityList = ItemSwordBase.getEntityList(entityLiving, distance);
+            for(Entity mob:entityList)
             {
-                if(worldIn.getBlockState(pos).getBlock() == Blocks.AIR || worldIn.getBlockState(pos).getBlock() == Blocks.WATER)
-                    worldIn.setBlockState(pos, Blocks.ICE.getDefaultState());
+                AxisAlignedBB bb = mob.getEntityBoundingBox();
+                Iterable<BlockPos> posIterable = BlockPos.getAllInBox((int)Math.round(bb.minX), (int)Math.round(bb.minY), (int)Math.round(bb.minZ),
+                        (int)Math.round(bb.maxX), (int)Math.round(bb.maxY), (int)Math.round(bb.maxZ));
+                for(BlockPos pos: posIterable)
+                {
+                    if(worldIn.getBlockState(pos).getBlock() == Blocks.AIR || worldIn.getBlockState(pos).getBlock() == Blocks.WATER)
+                        worldIn.setBlockState(pos, Blocks.ICE.getDefaultState());
+                }
             }
+            stack.damageItem(distance, entityLiving);
         }
-        stack.damageItem(distance, entityLiving);
+
         super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
     }
 }
