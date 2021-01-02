@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "jm_more_swords:items/wind_sword"
+  }
+}
