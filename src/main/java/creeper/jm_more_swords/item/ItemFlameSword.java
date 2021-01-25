@@ -3,7 +3,12 @@ package creeper.jm_more_swords.item;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAITarget;
+import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.monster.EntityBlaze;
+import net.minecraft.entity.monster.EntityEndermite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -14,7 +19,10 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
+import com.google.common.base.Predicate;
 
 /**
  * Created by jin on 2020/12/26 10:12 AM
@@ -64,12 +72,33 @@ public class ItemFlameSword extends ItemSwordBase
     //右键召唤烈焰人
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-        EntityLiving blaze = new EntityBlaze(worldIn);
+        EntityBlaze blaze = new EntityBlaze(worldIn);
+        removeGetAttackTargetTask(blaze);
+        blaze.targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(blaze, EntityLiving.class, 10, true, false,
+                (Predicate<EntityLiving>) entityLiving -> entityLiving != null && !playerIn.equals(entityLiving) && !(entityLiving instanceof EntityBlaze)));
         blaze.setPosition(playerIn.posX, playerIn.posY, playerIn.posZ);
+
         if(!worldIn.isRemote)
         {
             worldIn.spawnEntity(blaze);
         }
         return super.onItemRightClick(worldIn, playerIn, handIn);
+    }
+
+    private void removeGetAttackTargetTask(EntityLiving entityLiving)
+    {
+        List<EntityAITasks.EntityAITaskEntry> taskEntryList = new ArrayList<EntityAITasks.EntityAITaskEntry>(entityLiving.targetTasks.taskEntries);
+        for (EntityAITasks.EntityAITaskEntry ai : taskEntryList)
+        {
+            if (ai.action instanceof EntityAINearestAttackableTarget || ai.action instanceof EntityAIHurtByTarget)
+                entityLiving.targetTasks.removeTask(ai.action);
+        }
+
+        taskEntryList = new ArrayList<EntityAITasks.EntityAITaskEntry>(entityLiving.tasks.taskEntries);
+        for (EntityAITasks.EntityAITaskEntry ai : taskEntryList)
+        {
+            if (ai.action instanceof EntityAINearestAttackableTarget || ai.action instanceof EntityAIHurtByTarget)
+                entityLiving.targetTasks.removeTask(ai.action);
+        }
     }
 }

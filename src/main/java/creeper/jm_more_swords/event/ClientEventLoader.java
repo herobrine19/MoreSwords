@@ -1,16 +1,22 @@
 package creeper.jm_more_swords.event;
 
 import creeper.jm_more_swords.init.ItemInit;
+import creeper.jm_more_swords.renderer.WitherPlayerLayerRenderer;
 import creeper.jm_more_swords.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBox;
+import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -18,6 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -32,7 +39,8 @@ import java.util.Iterator;
 @Mod.EventBusSubscriber
 public class ClientEventLoader
 {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/items/ice_sword");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/steve_eye.png");
+//    private static final ModelBiped PLAYER = new ModelPlayer(0, false);
 
     private static int[] index_list = new int[]{
             0, 2, 3, 1,
@@ -71,33 +79,18 @@ public class ClientEventLoader
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
-    public static void onPlayerHoldSwordRender(RenderLivingEvent.Post event)
+    public static void onPlayerHoldSwordRenderPost(RenderLivingEvent.Post event)
     {
-        EntityLivingBase player = event.getEntity();
-        if (player instanceof EntityPlayer)
+        if (!(event.getEntity() instanceof EntityPlayer))
+            return;
+
+        NBTTagCompound compound = event.getEntity().getEntityData();
+        if (compound.hasKey(Reference.MODID + "_add_eye_layer"))
+            return;
+        else
         {
-            ItemStack heldItem = player.getHeldItem(EnumHand.MAIN_HAND);
-            if (heldItem.getItem() == ItemInit.WITHER_SWORD)
-            {
-                //Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
-                //Minecraft.getMinecraft().getRenderManager().renderEntity(player, player.posX, player.posY, player.posZ, player.rotationYaw, event.getPartialRenderTick(), true);
-//                Tessellator tessellator = Tessellator.getInstance();
-//                BufferBuilder bufferBuilder = tessellator.getBuffer();
-//                GlStateManager.pushMatrix();
-////                GlStateManager.scale(4, 4, 4);
-////                GlStateManager.translate(player.posX, player.posY, player.posZ);
-//                Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
-                GlStateManager.color(1, 1, 1);
-//                bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
-//                for (int i = 0; i < index_list.length; i += 4) {
-//                    for (int j = 0; j < 4; j++) {
-//                        int k = index_list[i+j];
-//                        bufferBuilder.pos(vertex_list[k][0], vertex_list[k][1], vertex_list[k][2]).endVertex();
-//                    }
-//                }
-//                Tessellator.getInstance().draw();
-//                GlStateManager.popMatrix();
-            }
+            compound.setBoolean(Reference.MODID + "_add_eye_layer", true);
+            event.getRenderer().addLayer(new WitherPlayerLayerRenderer((RenderPlayer) event.getRenderer()));
         }
     }
 }
